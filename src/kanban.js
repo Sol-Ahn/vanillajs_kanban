@@ -24,7 +24,7 @@ export default class Kanban {
         }
     }
 
-    // 모달 팝업
+    // 모달
     show(id = null) {
         modal.classList.remove('hidden');
         overlay.classList.remove("hidden");
@@ -58,6 +58,8 @@ export default class Kanban {
         const inputStage = stage.options[stage.selectedIndex].text;
         const inputContents = contents.value;
 
+
+        // 유효성 검증
         // let regExp = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi;
         //
         // if (regExp.test(inputTitle) === true) {
