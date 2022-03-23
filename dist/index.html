@@ -21,21 +21,7 @@
         <section>
             <article id="to-do">
                 <h2>To Do</h2>
-                <ul>
-                    <!--                    <li>-->
-                    <!--                        <div class="card">-->
-                    <!--                            <p class="card-title">제목: </p>-->
-                    <!--                            <p>생성일: </p>-->
-                    <!--                            <p>완료일: </p>-->
-                    <!--                            <p class="card-contents">내용</p>-->
-                    <!--                            <p class="card-btn">-->
-                    <!--                                <button class="updateBtn">수정</button>-->
-                    <!--                                <button class="deleteBtn">삭제</button>-->
-                    <!--                            </p>-->
-                    <!--                            <span class="card-priority">높음</span>-->
-                    <!--                        </div>-->
-                    <!--                    </li>-->
-                </ul>
+                <ul></ul>
             </article>
             <article id="in-progress">
                 <h2>In Progress</h2>
@@ -54,46 +40,6 @@
 </div>
 <div class="modal hidden">
     <div class="modal-overlay hidden"></div>
-    <div class="modal-window">
-        <button class="closeBtn">X</button>
-        <form>
-            <div>
-                <label for="title">제목</label>
-                <input id="title" type="text">
-            </div>
-            <div>
-                <label for="finishedDate">완료일</label>
-                <input id="finishedDate" type="date">
-            </div>
-            <div class="select-row">
-                <span>
-                    <label for="priority">우선순위</label>
-                    <select id="priority" name="priority">
-                        <option disabled selected value="">선택</option>
-                        <option value="1">높음</option>
-                        <option value="2">중간</option>
-                        <option value="3">낮음</option>
-                    </select>
-                </span>
-                <span>
-                    <label for="stage">상태</label>
-                    <select id="stage" name="stage">
-                        <option disabled selected value="">선택</option>
-                        <option value="toDo">To Do</option>
-                        <option value="inProgress">In Progress</option>
-                        <option value="done">Done</option>
-                    </select>
-                </span>
-            </div>
-            <div>
-                <label for="contents"></label>
-                <textarea id="contents" placeholder="내용을 입력하세요." rows="10"></textarea>
-            </div>
-            <div class="btn-row">
-                <button class="submitBtn" type="submit">작성 완료</button>
-            </div>
-        </form>
-    </div>
 </div>
 <script src="bundle.js" type="module"></script>
 </body>
