@@ -21,7 +21,6 @@ export default class Model {
 
             this.storage.save(newItem);
         }
-
     }
 
     update(updateItem, id) {

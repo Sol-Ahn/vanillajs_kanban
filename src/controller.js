@@ -2,6 +2,8 @@
 const addBtn = document.querySelector('.addBtn');
 const overlay = document.querySelector('.modal-overlay');
 const sorting = document.querySelector('#sorting');
+const ul = document.querySelectorAll('ul');
+
 
 export default class Controller {
 
@@ -51,6 +53,30 @@ export default class Controller {
             this.sortItem(e.target.value);
         });
 
+        document.body.ondragstart = (e) => {
+            this.kanban.dragStart(e.target);
+        };
+
+        document.body.ondragend = (e) => {
+            this.kanban.dragEnd();
+        };
+
+        document.body.ondragover = (e) => {
+            e.preventDefault();
+        };
+
+        document.body.ondragenter = (e) => {
+            this.kanban.dragEnter(e.target);
+        };
+
+        document.body.ondragleave = (e) => {
+            this.kanban.dragLeave(e.target);
+        };
+
+        document.body.ondrop = (e) => {
+            const dragItem = this.kanban.dragDrop(e.target);
+            this.model.update(dragItem, dragItem.id);
+        };
 
         document.body.onclick = (e) => {
             if (e.target.className === 'closeBtn') {

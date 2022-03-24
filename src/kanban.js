@@ -1,8 +1,9 @@
 // DOM selectors
-const ul = document.querySelector('ul');
+const toDoUl = document.querySelector('.to-do');
+const inProgressUl = document.querySelector('.in-progress');
+const doneUl = document.querySelector('.done');
 const modal = document.querySelector('.modal');
 const overlay = document.querySelector('.modal-overlay');
-const form = document.querySelector('form');
 
 import toDoView from "./todo";
 import modalView from './modal';
@@ -10,6 +11,7 @@ import modalView from './modal';
 export default class Kanban {
     constructor(storage) {
         this.storage = storage;
+        this.dragToDo = null;
     }
 
     // 칸반보드 렌더링
@@ -18,8 +20,21 @@ export default class Kanban {
         if (toDoList) {
             for (let i = 0; i < toDoList.length; i++) {
                 const li = document.createElement('li');
+                li.setAttribute("draggable", "true");
                 li.innerHTML = toDoView(toDoList[i]);
-                ul.appendChild(li);
+
+                if (toDoList[i].stage === 'To Do' || toDoList[i].stage === "선택") {
+                    toDoUl.appendChild(li);
+                }
+
+                if (toDoList[i].stage === 'In Progress') {
+                    inProgressUl.appendChild(li);
+                }
+
+                if (toDoList[i].stage === 'Done') {
+                    doneUl.appendChild(li);
+                }
+
             }
         }
     }
@@ -116,8 +131,20 @@ export default class Kanban {
 
         if (toDo) {
             const newToDo = document.createElement('li');
+            newToDo.setAttribute("draggable", "true");
             newToDo.innerHTML = toDoView(toDo);
-            ul.appendChild(newToDo);
+
+            if (toDo.stage === 'To Do' || toDo.stage === '선택') {
+                toDoUl.appendChild(newToDo);
+            }
+
+            if (toDo.stage === 'In Progress') {
+                inProgressUl.appendChild(newToDo);
+            }
+
+            if (toDo.stage === 'Done') {
+                doneUl.appendChild(newToDo);
+            }
         }
         return toDo;
     }
@@ -133,9 +160,20 @@ export default class Kanban {
 
     // 투두 카드 삭제
     deleteToDo(id) {
+        const data = this.storage.read().find((todo) => todo.id === id);
         let deleteEl = document.querySelector(`[data-id="${id}"]`).parentNode;
         if (deleteEl) {
-            ul.removeChild(deleteEl);
+            if (data.stage === 'toDo' || data.stage === "선택") {
+                toDoUl.removeChild(deleteEl);
+            }
+
+            if (data.stage === 'inProgress') {
+                inProgressUl.removeChild(deleteEl);
+            }
+
+            if (data.stage === 'done') {
+                doneUl.removeChild(deleteEl);
+            }
         }
     }
 
@@ -150,13 +188,66 @@ export default class Kanban {
             toDoList.sort((a, b) => b.priority.value - a.priority.value);
         }
 
-        ul.innerHTML = "";
+        toDoUl.innerHTML = "";
+        inProgressUl.innerHTML = "";
+        doneUl.innerHTML = "";
+
         for (let i = 0; i < toDoList.length; i++) {
-            const li = document.createElement('li');
-            li.innerHTML = toDoView(toDoList[i]);
-            ul.appendChild(li);
+            if (toDoList[i].stage === "To Do" || toDoList[i].stage === "선택") {
+                const li = document.createElement('li');
+                li.setAttribute("draggable", "true");
+                li.innerHTML = toDoView(toDoList[i]);
+                toDoUl.appendChild(li);
+            }
+
+            if (toDoList[i].stage === "In Progress") {
+                const li = document.createElement('li');
+                li.setAttribute("draggable", "true");
+                li.innerHTML = toDoView(toDoList[i]);
+                inProgressUl.appendChild(li);
+            }
+
+            if (toDoList[i].stage === "Done") {
+                const li = document.createElement('li');
+                li.setAttribute("draggable", "true");
+                li.innerHTML = toDoView(toDoList[i]);
+                doneUl.appendChild(li);
+            }
         }
+    }
+
+    // Drag and Drop
+    dragStart(target) {
+        console.log("drag start");
+        this.dragToDo = target;
+        this.dragToDo.classList.add("dragged");
+    }
+
+    dragEnd() {
+        console.log("drag end");
+        this.dragToDo.classList.remove("dragged");
+    }
+
+    dragEnter(target) {
+        console.log("drag enter");
+        target.style.background = "grey";
+    }
+
+    dragLeave(target) {
+        console.log("drag leave");
+        target.style.background = "";
 
     }
 
+    dragDrop(target) {
+        console.log("drag drop");
+        const stage = target.previousElementSibling.innerText;
+        const data = this.storage.read().find((todo) => todo.id === this.dragToDo.children[0].dataset.id);
+        data.stage = stage;
+
+        target.appendChild(this.dragToDo);
+        target.style.background = "";
+
+        return data;
+    }
 }
