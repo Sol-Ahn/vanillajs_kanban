@@ -1,36 +1,44 @@
 const path = require('path');
 
 module.exports = {
-    "mode": "none",
-    "entry": "./src/app.js",
-    "output": {
-        "path": __dirname + '/dist',
+    "mode"   : "none",
+    "entry"  : "./src/app.js",
+    "output" : {
+        "path"    : __dirname + '/dist',
         "filename": "bundle.js"
     },
     devServer: {
         static: path.join(__dirname, 'dist')
     },
-    "module": {
+    "module" : {
         "rules": [
             {
                 "test": /\.s[ac]ss$/i,
-                "use": [
+                "use" : [
                     "style-loader",
                     "css-loader",
                     "sass-loader"
                 ]
             },
             {
-                "test": /\.js$/,
+                "test"   : /\.js$/,
                 "exclude": /node_modules/,
-                "use": {
-                    "loader": "babel-loader",
+                "use"    : {
+                    "loader" : "babel-loader",
                     "options": {
                         "presets": [
                             "@babel/preset-env",
                         ]
                     }
                 }
+            },
+            {
+                test   : /\.(png|jpe?g|gif)$/i,
+                loader : 'file-loader',
+                options: {
+                    publicPath: './dist/',
+                    name      : '[name].[ext]?[hash]',
+                },
             },
         ]
     }
