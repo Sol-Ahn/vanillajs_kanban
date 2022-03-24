@@ -20,7 +20,6 @@ header {
 }
 
 #kanban {
-  //border: 1px solid black;
   width: 1000px;
   margin: 0 auto;
 }
@@ -43,12 +42,12 @@ header {
 section {
   width: 100%;
   display: flex;
+  gap: 15px;
 }
 
 article {
-  //border: 1px solid black;
+  min-height: 100vh;
   flex: 1;
-  padding: 3px;
 
 
   h2 {
@@ -61,15 +60,28 @@ article {
   }
 
   ul {
+    min-height: 500px;
+    background-color: lightgrey;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
 
     li {
-      padding: 3px 0;
+
+      &.dragged {
+        opacity: 0.5;
+        cursor: move;
+      }
 
       .card {
         padding: 10px;
         position: relative;
         border: 2px solid lightgrey;
         border-radius: 5px;
+        background-color: white;
+
 
         p:not(:last-child) {
           margin-bottom: 5px;
@@ -195,12 +207,12 @@ article {
         justify-content: flex-end;
 
         .submitBtn {
-          &-add{
+          &-add {
             padding: 5px 7px;
             background-color: black;
           }
 
-          &-update{
+          &-update {
             padding: 5px 7px;
             background-color: deepskyblue;
           }
