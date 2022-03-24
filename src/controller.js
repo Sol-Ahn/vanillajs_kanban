@@ -1,10 +1,7 @@
 // DOM selectors
 const addBtn = document.querySelector('.addBtn');
 const overlay = document.querySelector('.modal-overlay');
-const closeBtn = document.querySelector('.closeBtn');
-const form = document.querySelector('form');
 const sorting = document.querySelector('#sorting');
-
 
 export default class Controller {
 
@@ -22,8 +19,8 @@ export default class Controller {
     }
 
     updateItem(id) {
-        this.model.update(id);
-        this.kanban.updateToDo(id);
+        const data = this.kanban.updateToDo(id);
+        this.model.update(data, id);
     }
 
     removeItem(id) {
@@ -45,17 +42,8 @@ export default class Controller {
             this.kanban.show();
         });
 
-        closeBtn.addEventListener("click", () => {
-            this.kanban.hide();
-        });
 
         overlay.addEventListener("click", () => {
-            this.kanban.hide();
-        });
-
-        form.addEventListener("submit", (e) => {
-            e.preventDefault();
-            this.addItem();
             this.kanban.hide();
         });
 
@@ -63,16 +51,35 @@ export default class Controller {
             this.sortItem(e.target.value);
         });
 
+
         document.body.onclick = (e) => {
+            if (e.target.className === 'closeBtn') {
+                this.kanban.hide();
+            }
 
             if (e.target.className === "updateBtn") {
-                this.updateItem(e.target.dataset.id);
+                this.kanban.show(e.target.dataset.id);
             }
 
             if (e.target.className === 'deleteBtn') {
                 this.removeItem(e.target.dataset.id);
             }
+
+            if (e.target.className.includes('submitBtn')) {
+                if (e.target.className === "submitBtn-update") {
+                    let parentTag = e.target;
+                    while (parentTag.className !== 'modal-form') {
+                        parentTag = parentTag.parentElement;
+                    }
+                    this.updateItem(parentTag.dataset.id);
+                    this.kanban.hide();
+                } else {
+                    this.addItem();
+                    this.kanban.hide();
+                }
+            }
         };
+
     };
 }
 

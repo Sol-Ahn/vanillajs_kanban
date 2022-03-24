@@ -26,6 +26,7 @@ export default class Storage {
                     }
                 }
             });
+            localStorage.setItem(this.key, JSON.stringify(data));
         } else {
             toDos.push(toDoData);
             localStorage.setItem(this.key, JSON.stringify(data));

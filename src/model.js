@@ -8,6 +8,20 @@ export default class Model {
             return (Math.floor(Math.random() * (max - min) + 1) + min).toString();
         }
 
+        if (item) {
+            let newItem = {
+                id          : getRandomId(1, 10000),
+                title       : item.title,
+                createdDate : item.createdDate,
+                finishedDate: item.finishedDate,
+                priority    : item.priority,
+                stage       : item.stage,
+                contents    : item.contents
+            };
+
+            this.storage.save(newItem);
+        }
+
         let newItem = {
             id          : getRandomId(1, 10000),
             title       : item.title,
@@ -17,8 +31,6 @@ export default class Model {
             stage       : item.stage,
             contents    : item.contents
         };
-
-        this.storage.save(newItem);
     }
 
     update(updateItem, id) {

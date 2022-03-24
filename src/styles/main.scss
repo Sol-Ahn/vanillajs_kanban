@@ -46,7 +46,7 @@ section {
 }
 
 article {
-  border: 1px solid black;
+  //border: 1px solid black;
   flex: 1;
   padding: 3px;
 
@@ -146,7 +146,7 @@ article {
       cursor: pointer;
     }
 
-    form {
+    .modal-form {
       margin-top: 10px;
       padding: 20px;
 
@@ -195,8 +195,15 @@ article {
         justify-content: flex-end;
 
         .submitBtn {
-          background-color: black;
-          padding: 5px 10px;
+          &-add{
+            padding: 5px 7px;
+            background-color: black;
+          }
+
+          &-update{
+            padding: 5px 7px;
+            background-color: deepskyblue;
+          }
         }
       }
 

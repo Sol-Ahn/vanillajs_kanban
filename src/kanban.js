@@ -2,15 +2,10 @@
 const ul = document.querySelector('ul');
 const modal = document.querySelector('.modal');
 const overlay = document.querySelector('.modal-overlay');
-const title = document.querySelector('#title');
-const finishedDate = document.querySelector('#finishedDate');
-const priority = document.querySelector('#priority');
-const stage = document.querySelector("#stage");
-const contents = document.querySelector("#contents");
+const form = document.querySelector('form');
 
-
-// import modalView from './modal';
 import toDoView from "./todo";
+import modalView from './modal';
 
 export default class Kanban {
     constructor(storage) {
@@ -20,25 +15,43 @@ export default class Kanban {
     // 칸반보드 렌더링
     render() {
         const toDoList = this.storage.read();
-        for (let i = 0; i < toDoList.length; i++) {
-            const li = document.createElement('li');
-            li.innerHTML = toDoView(toDoList[i]);
-            ul.appendChild(li);
+        if (toDoList) {
+            for (let i = 0; i < toDoList.length; i++) {
+                const li = document.createElement('li');
+                li.innerHTML = toDoView(toDoList[i]);
+                ul.appendChild(li);
+            }
         }
     }
 
-    // 모달 팝업
-    show() {
+    // 모달
+    show(id = null) {
         modal.classList.remove('hidden');
         overlay.classList.remove("hidden");
+
+        if (id) {
+            const data = this.storage.read().find((todo) => todo.id === id);
+            const modalWindow = modalView(data);
+            overlay.insertAdjacentHTML("afterend", modalWindow);
+            return;
+        }
+        const modalWindow = modalView();
+        overlay.insertAdjacentHTML("afterend", modalWindow);
     }
 
     hide() {
+        const modalWindow = document.querySelector('.modal-window');
+        modal.removeChild(modalWindow);
         modal.classList.add('hidden');
     }
 
-    // 투두 카드 추가
-    addToDo() {
+    inputValue() {
+        const title = document.querySelector('#title');
+        const finishedDate = document.querySelector('#finishedDate');
+        const priority = document.querySelector('#priority');
+        const stage = document.querySelector("#stage");
+        const contents = document.querySelector("#contents");
+
         const inputTitle = title.value;
         const inputFinishedDate = finishedDate.value;
         const inputPriorityText = priority.options[priority.selectedIndex].text;
@@ -47,6 +60,7 @@ export default class Kanban {
         const inputContents = contents.value;
 
 
+        // 유효성 검증
         // let regExp = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi;
         //
         // if (regExp.test(inputTitle) === true) {
@@ -86,7 +100,7 @@ export default class Kanban {
 
         today = `${year}-${month}-${date}`;
 
-        const toDo = {
+        return {
             title       : inputTitle,
             createdDate : today,
             finishedDate: inputFinishedDate,
@@ -94,18 +108,27 @@ export default class Kanban {
             stage       : inputStage,
             contents    : inputContents
         };
+    }
 
-        const newToDo = document.createElement('li');
-        newToDo.innerHTML = toDoView(toDo);
-        ul.appendChild(newToDo);
+    // 투두 카드 추가
+    addToDo() {
+        const toDo = this.inputValue();
 
+        if (toDo) {
+            const newToDo = document.createElement('li');
+            newToDo.innerHTML = toDoView(toDo);
+            ul.appendChild(newToDo);
+        }
         return toDo;
     }
 
     // 투두 카드 수정
-    updateToDo() {
-        console.log('update');
+    updateToDo(id) {
+        let updatedEl = document.querySelector(`[data-id="${id}"]`).parentNode;
+        const updatedData = this.inputValue();
+        updatedEl.innerHTML = toDoView(updatedData);
 
+        return updatedData;
     }
 
     // 투두 카드 삭제
@@ -115,7 +138,6 @@ export default class Kanban {
             ul.removeChild(deleteEl);
         }
     }
-
 
     // 칸반보드 정렬
     sortToDo(selectedValue) {
