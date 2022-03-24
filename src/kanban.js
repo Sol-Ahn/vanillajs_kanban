@@ -4,7 +4,6 @@ const inProgressUl = document.querySelector('.in-progress');
 const doneUl = document.querySelector('.done');
 const modal = document.querySelector('.modal');
 const overlay = document.querySelector('.modal-overlay');
-const form = document.querySelector('form');
 
 import toDoView from "./todo";
 import modalView from './modal';
@@ -17,11 +16,14 @@ export default class Kanban {
     // 칸반보드 렌더링
     render() {
         const toDoList = this.storage.read();
+        console.log(toDoList);
         if (toDoList) {
             for (let i = 0; i < toDoList.length; i++) {
                 const li = document.createElement('li');
                 li.innerHTML = toDoView(toDoList[i]);
-                if (toDoList[i].stage === 'To Do') {
+
+                console.log(toDoList[i]);
+                if (toDoList[i].stage === 'To Do' || toDoList[i].stage === "선택") {
                     toDoUl.appendChild(li);
                 }
 
@@ -32,6 +34,8 @@ export default class Kanban {
                 if (toDoList[i].stage === 'Done') {
                     doneUl.appendChild(li);
                 }
+
+
             }
         }
     }
@@ -148,7 +152,6 @@ export default class Kanban {
     updateToDo(id) {
         let updatedEl = document.querySelector(`[data-id="${id}"]`).parentNode;
         const updatedData = this.inputValue();
-        console.log(updatedEl);
         updatedEl.innerHTML = toDoView(updatedData);
 
         return updatedData;
@@ -157,11 +160,9 @@ export default class Kanban {
     // 투두 카드 삭제
     deleteToDo(id) {
         const data = this.storage.read().find((todo) => todo.id === id);
-        console.log(data);
         let deleteEl = document.querySelector(`[data-id="${id}"]`).parentNode;
-        console.log(deleteEl);
         if (deleteEl) {
-            if (data.stage === 'toDo') {
+            if (data.stage === 'toDo' || data.stage === "선택") {
                 toDoUl.removeChild(deleteEl);
             }
 
@@ -191,7 +192,7 @@ export default class Kanban {
         doneUl.innerHTML = "";
 
         for (let i = 0; i < toDoList.length; i++) {
-            if (toDoList[i].stage === "To Do") {
+            if (toDoList[i].stage === "To Do" || toDoList[i].stage === "선택") {
                 const li = document.createElement('li');
                 li.innerHTML = toDoView(toDoList[i]);
                 toDoUl.appendChild(li);
