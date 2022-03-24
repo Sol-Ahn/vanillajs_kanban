@@ -54,7 +54,8 @@ export default class Kanban {
 
         const inputTitle = title.value;
         const inputFinishedDate = finishedDate.value;
-        const inputPriority = priority.options[priority.selectedIndex].text;
+        const inputPriorityText = priority.options[priority.selectedIndex].text;
+        const inputPriorityValue = priority.options[priority.selectedIndex].value;
         const inputStage = stage.options[stage.selectedIndex].text;
         const inputContents = contents.value;
 
@@ -82,7 +83,7 @@ export default class Kanban {
         //     return;
         // }
         //
-        // if (inputPriority === "선택") {
+        // if (inputPriorityText === "선택") {
         //     alert("우선순위를 선택해주세요.");
         //     return;
         // }
@@ -103,15 +104,10 @@ export default class Kanban {
             title       : inputTitle,
             createdDate : today,
             finishedDate: inputFinishedDate,
-            priority    : inputPriority,
+            priority    : {text: inputPriorityText, value: inputPriorityValue},
             stage       : inputStage,
             contents    : inputContents
         };
-    }
-
-    // 투두 카드 정렬
-    sortToDo() {
-        const toDoList = this.storage.read();
     }
 
     // 투두 카드 추가
@@ -142,4 +138,25 @@ export default class Kanban {
             ul.removeChild(deleteEl);
         }
     }
+
+    // 칸반보드 정렬
+    sortToDo(selectedValue) {
+        const toDoList = this.storage.read();
+        if (selectedValue === 'highest') {
+            toDoList.sort((a, b) => a.priority.value - b.priority.value);
+        }
+
+        if (selectedValue === 'lowest') {
+            toDoList.sort((a, b) => b.priority.value - a.priority.value);
+        }
+
+        ul.innerHTML = "";
+        for (let i = 0; i < toDoList.length; i++) {
+            const li = document.createElement('li');
+            li.innerHTML = toDoView(toDoList[i]);
+            ul.appendChild(li);
+        }
+
+    }
+
 }

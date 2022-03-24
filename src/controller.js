@@ -1,9 +1,6 @@
 // DOM selectors
 const addBtn = document.querySelector('.addBtn');
 const overlay = document.querySelector('.modal-overlay');
-const closeBtn = document.querySelector('.closeBtn');
-const form = document.querySelector('form');
-const card = document.querySelector('.card');
 const sorting = document.querySelector('#sorting');
 
 export default class Controller {
@@ -31,8 +28,8 @@ export default class Controller {
         this.model.delete(id);
     }
 
-    sortItem() {
-        this.kanban.sortToDo();
+    sortItem(selectedValue) {
+        this.kanban.sortToDo(selectedValue);
     }
 
 // event 처리
@@ -50,9 +47,12 @@ export default class Controller {
             this.kanban.hide();
         });
 
-        document.body.onclick = (e) => {
-            e.preventDefault();
+        sorting.addEventListener("change", (e) => {
+            this.sortItem(e.target.value);
+        });
 
+
+        document.body.onclick = (e) => {
             if (e.target.className === 'closeBtn') {
                 this.kanban.hide();
             }
@@ -68,7 +68,7 @@ export default class Controller {
             if (e.target.className.includes('submitBtn')) {
                 if (e.target.className === "submitBtn-update") {
                     let parentTag = e.target;
-                    while(parentTag.className !== 'modal-form'){
+                    while (parentTag.className !== 'modal-form') {
                         parentTag = parentTag.parentElement;
                     }
                     this.updateItem(parentTag.dataset.id);
@@ -79,7 +79,6 @@ export default class Controller {
                 }
             }
         };
-
 
     };
 }
