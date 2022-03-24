@@ -13,7 +13,7 @@ export default function todo(data) {
                     <button class="updateBtn" type="button" data-id=${data.id}>수정</button> 
                     <button class="deleteBtn" type="button" data-id=${data.id}>삭제</button>
                 </p>
-                <span class="card-priority">${data.priority ? data.priority : '미선택'}</span>
+                <span class="card-priority">${data.priority ? data.priority.text : '미선택'}</span>
             </div>
         `;
 
