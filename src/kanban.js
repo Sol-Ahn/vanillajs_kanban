@@ -230,7 +230,7 @@ export default class Kanban {
 
     dragEnter(target) {
         console.log("drag enter");
-        target.style.background = "grey";
+        target.style.background = "#bdbdbd";
     }
 
     dragLeave(target) {

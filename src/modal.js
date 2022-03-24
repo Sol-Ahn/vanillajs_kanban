@@ -1,7 +1,9 @@
 export default function modal(toDoData = null) {
     return `
         <div class="modal-window">
-        <button class="closeBtn">X</button>
+        <div class="closeBtn">
+        x
+        </div>
         <div class="modal-form" data-id=${toDoData === null ? "" : toDoData.id}>
             <div>
                 <label for="title">제목</label>
