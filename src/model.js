@@ -22,15 +22,6 @@ export default class Model {
             this.storage.save(newItem);
         }
 
-        let newItem = {
-            id          : getRandomId(1, 10000),
-            title       : item.title,
-            createdDate : item.createdDate,
-            finishedDate: item.finishedDate,
-            priority    : {text: item.priority.text, value: item.priority.value},
-            stage       : item.stage,
-            contents    : item.contents
-        };
     }
 
     update(updateItem, id) {
