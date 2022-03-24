@@ -3,6 +3,8 @@ const addBtn = document.querySelector('.addBtn');
 const overlay = document.querySelector('.modal-overlay');
 const closeBtn = document.querySelector('.closeBtn');
 const form = document.querySelector('form');
+const sorting = document.querySelector('#sorting');
+
 
 export default class Controller {
 
@@ -29,8 +31,8 @@ export default class Controller {
         this.model.delete(id);
     }
 
-    sortItem() {
-
+    sortItem(selectedValue) {
+        this.kanban.sortToDo(selectedValue);
     }
 
 // event 처리
@@ -55,6 +57,10 @@ export default class Controller {
             e.preventDefault();
             this.addItem();
             this.kanban.hide();
+        });
+
+        sorting.addEventListener("change", (e) => {
+            this.sortItem(e.target.value);
         });
 
         document.body.onclick = (e) => {

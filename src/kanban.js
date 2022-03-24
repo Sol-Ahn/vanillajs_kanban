@@ -41,42 +41,43 @@ export default class Kanban {
     addToDo() {
         const inputTitle = title.value;
         const inputFinishedDate = finishedDate.value;
-        const inputPriority = priority.options[priority.selectedIndex].text;
+        const inputPriorityText = priority.options[priority.selectedIndex].text;
+        const inputPriorityValue = priority.options[priority.selectedIndex].value;
         const inputStage = stage.options[stage.selectedIndex].text;
         const inputContents = contents.value;
 
 
-        let regExp = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi;
-
-        if (regExp.test(inputTitle) === true) {
-            alert("제목에는 특수문자를 사용할 수 없습니다!");
-            return;
-        }
-
-        if (inputTitle.length > 30) {
-            alert("제목은 30자를 초과할 수 없습니다!");
-            return;
-        }
-
-        if (regExp.test(inputContents) === true) {
-            alert("내용에는 특수문자를 사용할 수 없습니다!");
-            return;
-        }
-
-        if (inputContents.length > 150) {
-            alert("내용은 150자를 초과할 수 없습니다!");
-            return;
-        }
-
-        if(inputPriority === "선택"){
-            alert("우선순위를 선택해주세요.");
-            return;
-        }
-
-        if(inputStage === "선택"){
-            alert("상태를 선택해주세요.");
-            return;
-        }
+        // let regExp = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi;
+        //
+        // if (regExp.test(inputTitle) === true) {
+        //     alert("제목에는 특수문자를 사용할 수 없습니다!");
+        //     return;
+        // }
+        //
+        // if (inputTitle.length > 30) {
+        //     alert("제목은 30자를 초과할 수 없습니다!");
+        //     return;
+        // }
+        //
+        // if (regExp.test(inputContents) === true) {
+        //     alert("내용에는 특수문자를 사용할 수 없습니다!");
+        //     return;
+        // }
+        //
+        // if (inputContents.length > 150) {
+        //     alert("내용은 150자를 초과할 수 없습니다!");
+        //     return;
+        // }
+        //
+        // if (inputPriorityText === "선택") {
+        //     alert("우선순위를 선택해주세요.");
+        //     return;
+        // }
+        //
+        // if (inputStage === "선택") {
+        //     alert("상태를 선택해주세요.");
+        //     return;
+        // }
 
         let today = new Date();
         const year = today.getFullYear();
@@ -89,7 +90,7 @@ export default class Kanban {
             title       : inputTitle,
             createdDate : today,
             finishedDate: inputFinishedDate,
-            priority    : inputPriority,
+            priority    : {text: inputPriorityText, value: inputPriorityValue},
             stage       : inputStage,
             contents    : inputContents
         };
@@ -117,9 +118,23 @@ export default class Kanban {
 
 
     // 칸반보드 정렬
-    // sort() {
+    sortToDo(selectedValue) {
+        const toDoList = this.storage.read();
+        if (selectedValue === 'highest') {
+            toDoList.sort((a, b) => a.priority.value - b.priority.value);
+        }
 
-    // }
+        if (selectedValue === 'lowest') {
+            toDoList.sort((a, b) => b.priority.value - a.priority.value);
+        }
 
+        ul.innerHTML = "";
+        for (let i = 0; i < toDoList.length; i++) {
+            const li = document.createElement('li');
+            li.innerHTML = toDoView(toDoList[i]);
+            ul.appendChild(li);
+        }
+
+    }
 
 }
