@@ -1,5 +1,7 @@
 // DOM selectors
-const ul = document.querySelector('ul');
+const toDoUl = document.querySelector('.to-do');
+const inProgressUl = document.querySelector('.in-progress');
+const doneUl = document.querySelector('.done');
 const modal = document.querySelector('.modal');
 const overlay = document.querySelector('.modal-overlay');
 const form = document.querySelector('form');
@@ -19,7 +21,17 @@ export default class Kanban {
             for (let i = 0; i < toDoList.length; i++) {
                 const li = document.createElement('li');
                 li.innerHTML = toDoView(toDoList[i]);
-                ul.appendChild(li);
+                if (toDoList[i].stage === 'To Do') {
+                    toDoUl.appendChild(li);
+                }
+
+                if (toDoList[i].stage === 'In Progress') {
+                    inProgressUl.appendChild(li);
+                }
+
+                if (toDoList[i].stage === 'Done') {
+                    doneUl.appendChild(li);
+                }
             }
         }
     }
@@ -117,7 +129,17 @@ export default class Kanban {
         if (toDo) {
             const newToDo = document.createElement('li');
             newToDo.innerHTML = toDoView(toDo);
-            ul.appendChild(newToDo);
+            if (toDo.stage === 'toDo') {
+                toDoUl.appendChild(newToDo);
+            }
+
+            if (toDo.stage === 'inProgress') {
+                inProgressUl.appendChild(newToDo);
+            }
+
+            if (toDo.stage === 'done') {
+                doneUl.appendChild(newToDo);
+            }
         }
         return toDo;
     }
@@ -126,6 +148,7 @@ export default class Kanban {
     updateToDo(id) {
         let updatedEl = document.querySelector(`[data-id="${id}"]`).parentNode;
         const updatedData = this.inputValue();
+        console.log(updatedEl);
         updatedEl.innerHTML = toDoView(updatedData);
 
         return updatedData;
@@ -133,9 +156,22 @@ export default class Kanban {
 
     // 투두 카드 삭제
     deleteToDo(id) {
+        const data = this.storage.read().find((todo) => todo.id === id);
+        console.log(data);
         let deleteEl = document.querySelector(`[data-id="${id}"]`).parentNode;
+        console.log(deleteEl);
         if (deleteEl) {
-            ul.removeChild(deleteEl);
+            if (data.stage === 'toDo') {
+                toDoUl.removeChild(deleteEl);
+            }
+
+            if (data.stage === 'inProgress') {
+                inProgressUl.removeChild(deleteEl);
+            }
+
+            if (data.stage === 'done') {
+                doneUl.removeChild(deleteEl);
+            }
         }
     }
 
@@ -150,11 +186,29 @@ export default class Kanban {
             toDoList.sort((a, b) => b.priority.value - a.priority.value);
         }
 
-        ul.innerHTML = "";
+        toDoUl.innerHTML = "";
+        inProgressUl.innerHTML = "";
+        doneUl.innerHTML = "";
+
         for (let i = 0; i < toDoList.length; i++) {
-            const li = document.createElement('li');
-            li.innerHTML = toDoView(toDoList[i]);
-            ul.appendChild(li);
+            if (toDoList[i].stage === "To Do") {
+                const li = document.createElement('li');
+                li.innerHTML = toDoView(toDoList[i]);
+                toDoUl.appendChild(li);
+            }
+
+            if (toDoList[i].stage === "In Progress") {
+                const li = document.createElement('li');
+                li.innerHTML = toDoView(toDoList[i]);
+                inProgressUl.appendChild(li);
+            }
+
+            if (toDoList[i].stage === "Done") {
+                const li = document.createElement('li');
+                li.innerHTML = toDoView(toDoList[i]);
+                doneUl.appendChild(li);
+            }
+
         }
 
     }
