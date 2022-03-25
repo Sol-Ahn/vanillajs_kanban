@@ -11,7 +11,7 @@ Vanilla JS로 To Do List Kanban Board 구현하기
 
 ### Funtionality ###
 - 카드 추가
-  - 입력폼 validation check
+    - 입력폼 validation check
 - 카드 수정
 - 카드 삭제
 - 카드 리스트 우선순위별 정렬
