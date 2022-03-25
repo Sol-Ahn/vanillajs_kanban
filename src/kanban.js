@@ -74,39 +74,42 @@ export default class Kanban {
         const inputStage = stage.options[stage.selectedIndex].text;
         const inputContents = contents.value;
 
-
         // 유효성 검증
-        // let regExp = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi;
-        //
-        // if (regExp.test(inputTitle) === true) {
-        //     alert("제목에는 특수문자를 사용할 수 없습니다!");
-        //     return;
-        // }
-        //
-        // if (inputTitle.length > 30) {
-        //     alert("제목은 30자를 초과할 수 없습니다!");
-        //     return;
-        // }
-        //
-        // if (regExp.test(inputContents) === true) {
-        //     alert("내용에는 특수문자를 사용할 수 없습니다!");
-        //     return;
-        // }
-        //
-        // if (inputContents.length > 150) {
-        //     alert("내용은 150자를 초과할 수 없습니다!");
-        //     return;
-        // }
-        //
-        // if (inputPriorityText === "선택") {
-        //     alert("우선순위를 선택해주세요.");
-        //     return;
-        // }
-        //
-        // if (inputStage === "선택") {
-        //     alert("상태를 선택해주세요.");
-        //     return;
-        // }
+        let regExp = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi;
+
+        if (regExp.test(inputTitle) === true) {
+            alert("제목에는 특수문자를 사용할 수 없습니다!");
+            return;
+        }
+
+        if (inputTitle.length > 30) {
+            alert("제목은 30자를 초과할 수 없습니다!");
+            return;
+        }
+
+        if (regExp.test(inputContents) === true) {
+            alert("내용에는 특수문자를 사용할 수 없습니다!");
+            return;
+        }
+
+        if (inputContents.length > 150) {
+            alert("내용은 150자를 초과할 수 없습니다!");
+            return;
+        }
+
+        if (inputPriorityText === "선택") {
+            alert("우선순위를 선택해주세요.");
+            return;
+        }
+
+        if (inputStage === "선택") {
+            alert("상태를 선택해주세요.");
+            return;
+        }
+
+        function getRandomId(min, max) {
+            return (Math.floor(Math.random() * (max - min) + 1) + min).toString();
+        }
 
         let today = new Date();
         const year = today.getFullYear();
@@ -116,6 +119,7 @@ export default class Kanban {
         today = `${year}-${month}-${date}`;
 
         return {
+            id          : getRandomId(1, 10000),
             title       : inputTitle,
             createdDate : today,
             finishedDate: inputFinishedDate,
@@ -155,6 +159,18 @@ export default class Kanban {
         const updatedData = this.inputValue();
         updatedEl.innerHTML = toDoView(updatedData);
 
+        if (updatedData.stage === 'To Do' || updatedData.stage === "선택") {
+            toDoUl.appendChild(updatedEl);
+        }
+
+        if (updatedData.stage === 'In Progress') {
+            inProgressUl.appendChild(updatedEl);
+        }
+
+        if (updatedData.stage === 'Done') {
+            doneUl.appendChild(updatedEl);
+        }
+
         return updatedData;
     }
 
@@ -163,15 +179,15 @@ export default class Kanban {
         const data = this.storage.read().find((todo) => todo.id === id);
         let deleteEl = document.querySelector(`[data-id="${id}"]`).parentNode;
         if (deleteEl) {
-            if (data.stage === 'toDo' || data.stage === "선택") {
+            if (data.stage === 'To Do' || data.stage === "선택") {
                 toDoUl.removeChild(deleteEl);
             }
 
-            if (data.stage === 'inProgress') {
+            if (data.stage === 'In Progress') {
                 inProgressUl.removeChild(deleteEl);
             }
 
-            if (data.stage === 'done') {
+            if (data.stage === 'Done') {
                 doneUl.removeChild(deleteEl);
             }
         }
@@ -218,29 +234,27 @@ export default class Kanban {
 
     // Drag and Drop
     dragStart(target) {
-        console.log("drag start");
         this.dragToDo = target;
         this.dragToDo.classList.add("dragged");
     }
 
     dragEnd() {
-        console.log("drag end");
         this.dragToDo.classList.remove("dragged");
     }
 
     dragEnter(target) {
-        console.log("drag enter");
         target.style.background = "#bdbdbd";
     }
 
-    dragLeave(target) {
-        console.log("drag leave");
-        target.style.background = "";
+    // dragOver(targets) {
+    //     console.log(targets);
+    // }
 
+    dragLeave(target) {
+        target.style.background = "";
     }
 
     dragDrop(target) {
-        console.log("drag drop");
         const stage = target.previousElementSibling.innerText;
         const data = this.storage.read().find((todo) => todo.id === this.dragToDo.children[0].dataset.id);
         data.stage = stage;

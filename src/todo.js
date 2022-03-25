@@ -1,4 +1,5 @@
 export default function todo(data) {
+    console.log(data);
     return `
             <div class='card' data-id=${data ? data.id : ""}> 
                 <p class="card-title">제목: ${data ? data.title : ""}</p> 
