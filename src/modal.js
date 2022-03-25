@@ -1,4 +1,5 @@
 export default function modal(toDoData = null) {
+    console.log(toDoData);
     return `
         <div class="modal-window">
         <div class="closeBtn">
@@ -16,7 +17,7 @@ export default function modal(toDoData = null) {
             <div class="select-row">
                 <span>
                     <label for="priority">우선순위</label>
-                    <select id="priority" name="priority" onselect=${toDoData === null ? "" : toDoData.priority}>
+                    <select id="priority" name="priority" onselect=${toDoData === null ? "" : toDoData.priority.text}>
                         <option value="" disabled selected>선택</option>
                         <option value="1">높음</option>
                         <option value="2">중간</option>

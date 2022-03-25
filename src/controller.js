@@ -6,7 +6,6 @@ const ul = document.querySelectorAll('ul');
 
 
 export default class Controller {
-
     constructor(model, kanban, todo) {
         this.model = model;
         this.kanban = kanban;
@@ -16,8 +15,16 @@ export default class Controller {
 
 // 유저 입력값 받기
     addItem() {
-        const data = this.kanban.addToDo();
-        this.model.insert(data);
+        // Promise 객체 사용
+        return Promise.resolve(true).then(() => {
+            const data = this.kanban.addToDo();
+
+            if (!data) return false;
+
+            this.model.insert(data);
+
+            return true;
+        });
     }
 
     updateItem(id) {
@@ -44,7 +51,6 @@ export default class Controller {
             this.kanban.show();
         });
 
-
         overlay.addEventListener("click", () => {
             this.kanban.hide();
         });
@@ -63,6 +69,8 @@ export default class Controller {
 
         document.body.ondragover = (e) => {
             e.preventDefault();
+            // const items = [...e.target.parentElement.querySelector('ul').querySelectorAll('li')];
+            // this.kanban.dragOver(items);
         };
 
         document.body.ondragenter = (e) => {
@@ -84,6 +92,7 @@ export default class Controller {
             }
 
             if (e.target.className === "updateBtn") {
+                console.log(e.target);
                 this.kanban.show(e.target.dataset.id);
             }
 
@@ -100,12 +109,13 @@ export default class Controller {
                     this.updateItem(parentTag.dataset.id);
                     this.kanban.hide();
                 } else {
-                    this.addItem();
-                    this.kanban.hide();
+                    this.addItem().then((res) => {
+                        if (!res) return false;
+                        this.kanban.hide();
+                    });
                 }
             }
         };
-
     };
 }
 

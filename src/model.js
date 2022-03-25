@@ -4,17 +4,15 @@ export default class Model {
     }
 
     insert(item) {
-        function getRandomId(min, max) {
-            return (Math.floor(Math.random() * (max - min) + 1) + min).toString();
-        }
+
 
         if (item) {
             let newItem = {
-                id          : getRandomId(1, 10000),
+                id          : item.id,
                 title       : item.title,
                 createdDate : item.createdDate,
                 finishedDate: item.finishedDate,
-                priority    : item.priority,
+                priority    : {text: item.priority.text, value: item.priority.value},
                 stage       : item.stage,
                 contents    : item.contents
             };
