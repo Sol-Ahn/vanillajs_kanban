@@ -23,6 +23,7 @@ Vanilla JS로 To Do List Kanban Board 구현하기
 ```
 
 ### Demo ###
+![Vanilla JS Kanban Board Project Demo](./src/assets/Vanilla%20JS%20Kanban%20Board%20데모.png)
 
 ### Bug ###
 - 수정 입력폼에 우선순위, 상태 값이 세팅되지 않는 이슈
