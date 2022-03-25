@@ -1,29 +1,29 @@
-# README #
+## Vanilla JS To Do Kanban Board Project ##
 
-This README would normally document whatever steps are necessary to get your application up and running.
+### Summary ###
+Vanilla JS로 To Do List Kanban Board 구현하기
 
-### What is this repository for? ###
+### Tech Skill ###
+- Vanilla Javascript
+- Webpack, Babel
+- Sass
+- localStorage
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+### Funtionality ###
+- 카드 추가
+  - 입력폼 validation check
+- 카드 수정
+- 카드 삭제
+- 카드 리스트 우선순위별 정렬
+- 카드 drag & drop
 
-### How do I get set up? ###
+### Run Local Server ###
+```text
+    npm run dev-server
+```
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
+### Demo ###
 
-### Contribution guidelines ###
-
-* Writing tests
-* Code review
-* Other guidelines
-
-### Who do I talk to? ###
-
-* Repo owner or admin
-* Other community or team contact
+### Bug ###
+- 수정 입력폼에 우선순위, 상태 값이 세팅되지 않는 이슈
+- 카드 사이에 drag & drop 이 되지 않는 이슈
