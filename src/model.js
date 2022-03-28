@@ -11,7 +11,7 @@ export default class Model {
 				createdDate: item.createdDate,
 				finishedDate: item.finishedDate,
 				priority: { text: item.priority.text, value: item.priority.value },
-				stage: item.stage,
+				stage: { text: item.stage.text, value: item.stage.value },
 				contents: item.contents,
 			};
 

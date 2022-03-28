@@ -35,9 +35,9 @@ export default function modal(toDoData = null) {
 											toDoData === null ? "" : toDoData.stage
 										}>
                         <option value="" disabled  selected>선택</option>
-                        <option value="toDo">To Do</option>
-                        <option value="inProgress">In Progress</option>
-                        <option value="done">Done</option>
+                        <option value="1">To Do</option>
+                        <option value="2">In Progress</option>
+                        <option value="3">Done</option>
                     </select>
                 </span>
             </div>

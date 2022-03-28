@@ -23,15 +23,18 @@ export default class Kanban {
 				li.setAttribute("draggable", "true");
 				li.innerHTML = toDoView(toDoList[i]);
 
-				if (toDoList[i].stage === "To Do" || toDoList[i].stage === "선택") {
+				if (
+					toDoList[i].stage.text === "To Do" ||
+					toDoList[i].stage.text === "선택"
+				) {
 					toDoUl.appendChild(li);
 				}
 
-				if (toDoList[i].stage === "In Progress") {
+				if (toDoList[i].stage.text === "In Progress") {
 					inProgressUl.appendChild(li);
 				}
 
-				if (toDoList[i].stage === "Done") {
+				if (toDoList[i].stage.text === "Done") {
 					doneUl.appendChild(li);
 				}
 			}
@@ -47,6 +50,9 @@ export default class Kanban {
 			const data = this.storage.read().find((todo) => todo.id === id);
 			const modalWindow = modalView(data);
 			overlay.insertAdjacentHTML("afterend", modalWindow);
+			const priority = document.querySelector("#priority");
+			priority.options[data.priority.value].setAttribute("selected", true);
+			stage.options[data.stage.value].setAttribute("selected", true);
 			return;
 		}
 		const modalWindow = modalView();
@@ -70,7 +76,8 @@ export default class Kanban {
 		const inputFinishedDate = finishedDate.value;
 		const inputPriorityText = priority.options[priority.selectedIndex].text;
 		const inputPriorityValue = priority.options[priority.selectedIndex].value;
-		const inputStage = stage.options[stage.selectedIndex].text;
+		const inputStageText = stage.options[stage.selectedIndex].text;
+		const inputStageValue = stage.options[stage.selectedIndex].value;
 		const inputContents = contents.value;
 
 		// 유효성 검증
@@ -101,7 +108,7 @@ export default class Kanban {
 			return;
 		}
 
-		if (inputStage === "선택") {
+		if (inputStageText === "선택") {
 			alert("상태를 선택해주세요.");
 			return;
 		}
@@ -123,7 +130,7 @@ export default class Kanban {
 			createdDate: today,
 			finishedDate: inputFinishedDate,
 			priority: { text: inputPriorityText, value: inputPriorityValue },
-			stage: inputStage,
+			stage: { text: inputStageText, value: inputStageValue },
 			contents: inputContents,
 		};
 	}
@@ -137,15 +144,15 @@ export default class Kanban {
 			newToDo.setAttribute("draggable", "true");
 			newToDo.innerHTML = toDoView(toDo);
 
-			if (toDo.stage === "To Do" || toDo.stage === "선택") {
+			if (toDo.stage.text === "To Do" || toDo.stage.text === "선택") {
 				toDoUl.appendChild(newToDo);
 			}
 
-			if (toDo.stage === "In Progress") {
+			if (toDo.stage.text === "In Progress") {
 				inProgressUl.appendChild(newToDo);
 			}
 
-			if (toDo.stage === "Done") {
+			if (toDo.stage.text === "Done") {
 				doneUl.appendChild(newToDo);
 			}
 		}
@@ -178,15 +185,15 @@ export default class Kanban {
 		const data = this.storage.read().find((todo) => todo.id === id);
 		let deleteEl = document.querySelector(`[data-id="${id}"]`).parentNode;
 		if (deleteEl) {
-			if (data.stage === "To Do" || data.stage === "선택") {
+			if (data.stage.text === "To Do" || data.stage.text === "선택") {
 				toDoUl.removeChild(deleteEl);
 			}
 
-			if (data.stage === "In Progress") {
+			if (data.stage.text === "In Progress") {
 				inProgressUl.removeChild(deleteEl);
 			}
 
-			if (data.stage === "Done") {
+			if (data.stage.text === "Done") {
 				doneUl.removeChild(deleteEl);
 			}
 		}
@@ -208,21 +215,24 @@ export default class Kanban {
 		doneUl.innerHTML = "";
 
 		for (let i = 0; i < toDoList.length; i++) {
-			if (toDoList[i].stage === "To Do" || toDoList[i].stage === "선택") {
+			if (
+				toDoList[i].stage.text === "To Do" ||
+				toDoList[i].stage.text === "선택"
+			) {
 				const li = document.createElement("li");
 				li.setAttribute("draggable", "true");
 				li.innerHTML = toDoView(toDoList[i]);
 				toDoUl.appendChild(li);
 			}
 
-			if (toDoList[i].stage === "In Progress") {
+			if (toDoList[i].stage.text === "In Progress") {
 				const li = document.createElement("li");
 				li.setAttribute("draggable", "true");
 				li.innerHTML = toDoView(toDoList[i]);
 				inProgressUl.appendChild(li);
 			}
 
-			if (toDoList[i].stage === "Done") {
+			if (toDoList[i].stage.text === "Done") {
 				const li = document.createElement("li");
 				li.setAttribute("draggable", "true");
 				li.innerHTML = toDoView(toDoList[i]);
@@ -258,7 +268,11 @@ export default class Kanban {
 		const data = this.storage
 			.read()
 			.find((todo) => todo.id === this.dragToDo.children[0].dataset.id);
-		data.stage = stage;
+		data.stage.text = stage;
+
+		if (stage === "To Do") data.stage.value = 1;
+		if (stage === "In Progress") data.stage.value = 2;
+		if (stage === "Done") data.stage.value = 3;
 
 		target.appendChild(this.dragToDo);
 		target.style.background = "";

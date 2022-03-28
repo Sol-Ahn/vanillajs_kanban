@@ -90,7 +90,6 @@ export default class Controller {
 			}
 
 			if (e.target.className === "updateBtn") {
-				console.log(e.target);
 				this.kanban.show(e.target.dataset.id);
 			}
 
